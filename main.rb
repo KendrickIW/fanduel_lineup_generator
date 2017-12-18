@@ -16,15 +16,17 @@ players = players.slice(1, players.length)
 
 filtered =  players.combination(9).to_a.reject do |lineup|
   salary_total = lineup.reduce(0) { |sum, n| sum + n[8].to_i }
+  wrs = lineup.find_all { |x| x[2] == "WR" }
 
+  salary_total > 60000 ||
+  salary_total < 58000 ||
   lineup.find_all { |x| x[2] == "K" }.length != 1 ||
   lineup.find_all { |x| x[2] == "D" }.length != 1 ||
   lineup.find_all { |x| x[2] == "TE" }.length != 1 ||
-  lineup.find_all { |x| x[2] == "WR" }.length != 3 ||
+  wrs.length != 3 ||
+  wrs.map { |x| x[10] }.uniq.length != 3 ||
   lineup.find_all { |x| x[2] == "RB" }.length != 2 ||
-  lineup.find_all { |x| x[2] == "QB" }.length != 1 ||
-  salary_total > 60000 ||
-  salary_total < 58000
+  lineup.find_all { |x| x[2] == "QB" }.length != 1
 
 end
 
@@ -45,7 +47,6 @@ filtered.shuffle.take(fanduel.length).each_with_index do |lineup, index|
   end
 
   file.write(csv_string)
-
 end
 
 file.close
