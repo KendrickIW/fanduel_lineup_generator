@@ -18,7 +18,7 @@ filtered =  players.combination(9).to_a.reject do |lineup|
   salary_total = lineup.reduce(0) { |sum, n| sum + n[8].to_i }
 
   salary_total > 60000 ||
-  salary_total < 58000 ||
+  salary_total < 57000 ||
   lineup.find_all { |x| x[2] == "PG" }.length != 2 ||
   lineup.find_all { |x| x[2] == "SG" }.length != 2 ||
   lineup.find_all { |x| x[2] == "SF" }.length != 2 ||
@@ -32,15 +32,15 @@ file = File.open("output.csv", "w")
 fanduel = fanduel.slice(1, 150).map { |x| x.slice(0, 3) }
 
 filtered.shuffle.take(fanduel.length).each_with_index do |lineup, index|
-  qb = find_all_ids_by_position(lineup, "PG")
-  rb = find_all_ids_by_position(lineup, "SG")
-  wr = find_all_ids_by_position(lineup, "SF")
-  te = find_all_ids_by_position(lineup, "PF")
-  d = find_all_ids_by_position(lineup, "C")
+  pg = find_all_ids_by_position(lineup, "PG")
+  sg = find_all_ids_by_position(lineup, "SG")
+  sf = find_all_ids_by_position(lineup, "SF")
+  pf = find_all_ids_by_position(lineup, "PF")
+  c = find_all_ids_by_position(lineup, "C")
 
 
   csv_string = CSV.generate("", {:force_quotes => true})  do |csv|
-    csv << fanduel[index] + qb + rb + wr + te + d
+    csv << fanduel[index] + pg + sg + sf + pf + c
   end
 
   file.write(csv_string)
